@@ -1,5 +1,5 @@
 import sys
-VERSION = str('1.5')
+VERSION = str('1.6')
 
 R = '\033[31m' # red
 G = '\033[32m' # green
@@ -24,18 +24,24 @@ def banner():
 
 banner()
 
-print(f"""
-{C}[i]{W} If you're using Command Prompt on Windows,
-{C}[i]{W} then the coloured text will not work.
-{C}[i]{W} You will have to use the Windows Terminal App.
+if sys.platform == 'win32':
+    print(f"""
+    {C}[i]{W} If you're using Command Prompt on Windows,
+    {C}[i]{W} then the coloured text will not work.
+    {C}[i]{W} You will have to use the Windows Terminal App.
+    """)
 
-""")
 print(f"{C}[+] Checking dependencie(s) . . .")
 try:
     import requests
 except ModuleNotFoundError:
     sys.exit(f"\n{R}Requests module not found\n\nPlease install https://pypi.org/project/requests/ for this to work.\n")
 print(f"{C}[+] Dependencie(s) are up to date . . . {G}requests>=2.26\n")
+
+version = requests.get('https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt').text
+
+if VERSION < version:
+    print("Update available for Scratch User Data.\nYou can continue to use this version,\nbut updating is recommended.")
 
 if  len(sys.argv) > 1:
     username = sys.argv[1]
