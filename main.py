@@ -40,7 +40,7 @@ print(f"{C}[+] Dependencie(s) are up to date . . . {G}requests>=2.26\n")
 
 version = requests.get('https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt').text
 
-if VERSION < version:
+if float(VERSION) < float(version):
     print("Update available for Scratch User Data.\nYou can continue to use this version,\nbut updating is recommended.")
 
 if  len(sys.argv) > 1:
