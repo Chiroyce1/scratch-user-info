@@ -17,7 +17,7 @@ pip install -r requirements.txt
 
 If you don't have Git installed, click [here](https://codeload.github.com/Chiroyce1/scratch-user-data/zip/refs/heads/beta) to download a zip file, unzip it, and then run 
 ```bash
-cd scratch-user-data
+cd scratch-user-data-beta
 pip install -r requirements.txt
 ```
 
