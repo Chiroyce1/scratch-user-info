@@ -1,4 +1,7 @@
 # scratch-user-data
+## BETA branch
+### This version is NOT stable and shouldn't be used unless you are contributing to this.
+
 Command line tool for getting information about a Scratch User
 
 More info available [here](https://scratch.mit.edu/discuss/topic/542409/?page=1#post-5600424).
