@@ -1,6 +1,9 @@
 import sys
-import colorama
-VERSION = str('1.7')
+
+from colorama import Back, Fore, Style, init
+
+init()
+
 
 R = '\033[31m' # red
 G = '\033[32m' # green
