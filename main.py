@@ -4,15 +4,11 @@ from colorama import Back, Fore, Style, init
 
 init()
 
-
-R = '\033[31m' # red
-G = '\033[32m' # green
-C = '\033[36m' # cyan
-W = '\033[0m'  # white
+VERSION = str('1.7')
 
 
 def banner():
-    print(f"""{C}
+    print(f"""{Fore.CYAN}
    _____                _       _       _    _                 _____        _        
   / ____|              | |     | |     | |  | |               |  __ \      | |       
  | (___   ___ _ __ __ _| |_ ___| |__   | |  | |___  ___ _ __  | |  | | __ _| |_ __ _ 
@@ -20,27 +16,27 @@ def banner():
   ____) | (__| | | (_| | || (__| | | | | |__| \__ \  __/ |    | |__| | (_| | || (_| |
  |_____/ \___|_|  \__,_|\__\___|_| |_|  \____/|___/\___|_|    |_____/ \__,_|\__\__,_|
                                                                                                                                                                
-{G}=========================================================
-{G}[>] {C} Version    : {W}{VERSION}
-{G}[>] {C} Created by : {W}Chiroyce
-{G}=========================================================
+{Fore.GREEN}=========================================================
+{Fore.GREEN}[>] {Fore.CYAN} Version    : {Style.RESET_ALL}{VERSION}
+{Fore.GREEN}[>] {Fore.CYAN} Created by : {Style.RESET_ALL}Chiroyce
+{Fore.GREEN}=========================================================
     """)
 
 banner()
 
 if sys.platform == 'win32':
     print(f"""
-    {C}[i]{W} If you're using Command Prompt on Windows,
-    {C}[i]{W} then the coloured text will not work.
-    {C}[i]{W} You will have to use the Windows Terminal App.
+    {Fore.CYAN}[i]{Style.RESET_ALL} If you're using Command Prompt on Windows,
+    {Fore.CYAN}[i]{Style.RESET_ALL} then the coloured text will not work.
+    {Fore.CYAN}[i]{Style.RESET_ALL} You will have to use the Windows Terminal App.
     """)
 
-print(f"{C}[+] Checking dependencie(s) . . .")
+print(f"{Fore.CYAN}[+] Checking dependencie(s) . . .")
 try:
     import requests
 except ModuleNotFoundError:
-    sys.exit(f"\n{R}Requests module not found\n\nPlease install https://pypi.org/project/requests/ for this to work.\n")
-print(f"{C}[+] Dependencie(s) are up to date . . . {G}requests>=2.27.1\n")
+    sys.exit(f"\n{Fore.RED}Requests module not found\n\nPlease install https://pypi.org/project/requests/ for this to work.\n")
+print(f"{Fore.CYAN}[+] Dependencie(s) are up to date . . . {Fore.GREEN}requests>=2.27.1\n")
 
 version = requests.get('https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt').text
 
@@ -49,22 +45,22 @@ if float(VERSION) < float(version):
 
 if  len(sys.argv) > 1:
     username = sys.argv[1]
-    print(f"{C}[+] Input taken from sys args: {G}{username}")
+    print(f"{Fore.CYAN}[+] Input taken from sys args: {Fore.GREEN}{username}")
 else:
-    username = input(f"\n{C}Enter USERNAME\n>>> {G}")
+    username = input(f"\n{Fore.CYAN}Enter USERNAME\n>>> {Fore.GREEN}")
 
-print(f"\n{C}[+] Validating username . . . (1/3)")
+print(f"\n{Fore.CYAN}[+] Validating username . . . (1/3)")
 response = requests.get(f'https://api.scratch.mit.edu/users/{username}/projects').json()
-print(f"\n{C}[+] Checking for valid shared projects . . (2/3)\n")
+print(f"\n{Fore.CYAN}[+] Checking for valid shared projects . . (2/3)\n")
 try:
     projectID = response[0]['id']
     date = response[0]['history']['modified']
     hasProjects = True
 except IndexError:
     hasProjects = False
-    details = f"{G}{username} {C}has no shared projects. \n"
+    details = f"{Fore.GREEN}{username} {Fore.CYAN}has no shared projects. \n"
 except KeyError:
-    sys.exit(f"{R}{username} is an invalid username.\n")
+    sys.exit(f"{Fore.RED}{username} is an invalid username.\n")
 
 if hasProjects:
     response = requests.get(f'https://projects.scratch.mit.edu/{projectID}/').json()
@@ -74,33 +70,33 @@ response = requests.get(f'https://api.scratch.mit.edu/users/{username}/').json()
 postData = requests.get(f'https://scratchdb.lefty.one/v3/forum/user/info/{username}').json()
 ocularData = requests.get(f'https://my-ocular.jeffalo.net/api/user/{username}').json()
 print("===============================================\n")
-print(f"{C}Username                 - {G}{username}\n")
-print(f"{C}User ID                  - {G}{response['id']}\n")
-print(f"{C}Joined date              - {G}{response['history']['joined']}\n")
-print(f"{C}Country                  - {G}{response['profile']['country']}\n")
-print(f"{C}Scratch Team Member?     - {G}{response['scratchteam']}\n")
+print(f"{Fore.CYAN}Username                 - {Fore.GREEN}{username}\n")
+print(f"{Fore.CYAN}User ID                  - {Fore.GREEN}{response['id']}\n")
+print(f"{Fore.CYAN}Joined date              - {Fore.GREEN}{response['history']['joined']}\n")
+print(f"{Fore.CYAN}Country                  - {Fore.GREEN}{response['profile']['country']}\n")
+print(f"{Fore.CYAN}Scratch Team Member?     - {Fore.GREEN}{response['scratchteam']}\n")
 if hasProjects != True:
     print(details)
 try:
-    print(f"{C}Total Forum Posts        - {G}{postData['counts']['total']['count']}\n")
+    print(f"{Fore.CYAN}Total Forum Posts        - {Fore.GREEN}{postData['counts']['total']['count']}\n")
 except KeyError:
-    print(f"{C}Total Forum posts   - {G}0")
+    print(f"{Fore.CYAN}Total Forum posts   - {Fore.GREEN}0")
 try:
-    print(f"{C}Forum Leaderboard Rank   - {G}{postData['counts']['total']['rank']}\n")
+    print(f"{Fore.CYAN}Forum Leaderboard Rank   - {Fore.GREEN}{postData['counts']['total']['rank']}\n")
 except KeyError:
-    print(f"{C}Forum Leaderboard Rank    - {G}NA | {R} User has no posts")
+    print(f"{Fore.CYAN}Forum Leaderboard Rank    - {Fore.GREEN}NA | {Fore.RED} User has no posts")
 if hasProjects != False:
-    print(f"{C}User-Agent - \n{G}{userAgent}\n")
-    print(f"{C}User-Agent lastUpdate    - {G}{date}\n")
+    print(f"{Fore.CYAN}User-Agent - \n{Fore.GREEN}{userAgent}\n")
+    print(f"{Fore.CYAN}User-Agent lastUpdate    - {Fore.GREEN}{date}\n")
 try:
-    print(f"{C}Ocular Status -            \n{G}{ocularData['status']}\n")
+    print(f"{Fore.CYAN}Ocular Status -            \n{Fore.GREEN}{ocularData['status']}\n")
 except KeyError:
-    print(f"{C}Ocular Status -            \n{G}NA | {R}User has no Ocular Status\n")
+    print(f"{Fore.CYAN}Ocular Status -            \n{Fore.GREEN}NA | {Fore.RED}User has no Ocular Status\n")
 try:
-    print(f"{C}Ocular lastUpdate        -           {G}{ocularData['meta']['updated']}\n")
+    print(f"{Fore.CYAN}Ocular lastUpdate        -           {Fore.GREEN}{ocularData['meta']['updated']}\n")
 except KeyError:
-    print(f"{C}Ocular lastUpdate -            \n{G}NA | {R}User has no Ocular Status\n")
-print(f"{C}About Me -            \n{G}{response['profile']['bio']}\n")
-print(f"{C}What I'm working on - \n{G}{response['profile']['status']}\n")
+    print(f"{Fore.CYAN}Ocular lastUpdate -            \n{Fore.GREEN}NA | {Fore.RED}User has no Ocular Status\n")
+print(f"{Fore.CYAN}About Me -            \n{Fore.GREEN}{response['profile']['bio']}\n")
+print(f"{Fore.CYAN}What I'm working on - \n{Fore.GREEN}{response['profile']['status']}\n")
 print('\n')
-input(f"{C}Press enter to exit\n")
+input(f"{Fore.CYAN}Press enter to exit\n")
