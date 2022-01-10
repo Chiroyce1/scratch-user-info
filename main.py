@@ -1,5 +1,6 @@
 import sys
-VERSION = str('1.6')
+import colorama
+VERSION = str('1.7')
 
 R = '\033[31m' # red
 G = '\033[32m' # green
