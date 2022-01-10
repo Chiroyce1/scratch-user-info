@@ -36,7 +36,7 @@ try:
     import requests
 except ModuleNotFoundError:
     sys.exit(f"\n{R}Requests module not found\n\nPlease install https://pypi.org/project/requests/ for this to work.\n")
-print(f"{C}[+] Dependencie(s) are up to date . . . {G}requests>=2.26\n")
+print(f"{C}[+] Dependencie(s) are up to date . . . {G}requests>=2.27.1\n")
 
 version = requests.get('https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt').text
 
