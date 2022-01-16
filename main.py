@@ -24,13 +24,6 @@ def banner():
 
 banner()
 
-if sys.platform == 'win32':
-    print(f"""
-    {Fore.CYAN}[i]{Style.RESET_ALL} If you're using Command Prompt on Windows,
-    {Fore.CYAN}[i]{Style.RESET_ALL} then the coloured text will not work.
-    {Fore.CYAN}[i]{Style.RESET_ALL} You will have to use the Windows Terminal App.
-    """)
-
 print(f"{Fore.CYAN}[+] Checking dependencie(s) . . .")
 try:
     import requests
