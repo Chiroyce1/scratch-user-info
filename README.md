@@ -13,7 +13,7 @@ pip install -r requirements.txt
 # run pip3 if pip doesn't work
 ```
 
-If you don't have Git installed, click [here](https://codeload.github.com/Chiroyce1/scratch-user-data/zip/refs/heads/beta) to download a zip file, unzip it, and then run 
+If you don't have Git installed, click [here](https://github.com/Chiroyce1/scratch-user-data/archive/refs/heads/main.zip) to download a zip file, unzip it, and then run 
 ```bash
 cd scratch-user-data-beta
 pip install -r requirements.txt
