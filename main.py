@@ -4,7 +4,7 @@ from colorama import Back, Fore, Style, init
 
 init()
 
-VERSION = str('1.7')
+VERSION = str('1.71')
 
 
 def banner():
@@ -27,7 +27,6 @@ banner()
 
 print(f"{Fore.CYAN}[+] Checking dependencie(s) . . .")
 try:
-    import requests
     import requests
 except ModuleNotFoundError:
     sys.exit(f"\n{Fore.RED}Requests module not found\n\nPlease install https://pypi.org/project/requests/ for this to work.\n")
