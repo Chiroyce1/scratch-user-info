@@ -7,7 +7,7 @@ More info available [here](https://scratch.mit.edu/discuss/topic/542409/?page=1#
 ## Installation
 
 ```bash
-git clone -b beta https://github.com/Chiroyce1/scratch-user-data scratch-user-data-beta
+git clone https://github.com/Chiroyce1/scratch-user-data scratch-user-data
 cd scratch-user-data-beta
 pip install -r requirements.txt
 # run pip3 if pip doesn't work
