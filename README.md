@@ -7,16 +7,17 @@ More info available [here](https://scratch.mit.edu/discuss/topic/542409/?page=1#
 ## Installation
 
 ```bash
-git clone https://github.com/Chiroyce1/scratch-user-data scratch-user-data
-cd scratch-user-data-beta
+git clone https://github.com/Chiroyce1/scratch-user-data
+cd scratch-user-data
 pip install -r requirements.txt
 # run pip3 if pip doesn't work
 ```
 
 If you don't have Git installed, click [here](https://github.com/Chiroyce1/scratch-user-data/archive/refs/heads/main.zip) to download a zip file, unzip it, and then run 
 ```bash
-cd scratch-user-data-beta
+cd scratch-user-data
 pip install -r requirements.txt
+# run pip3 if pip doesn't work
 ```
 
 ## Usage
