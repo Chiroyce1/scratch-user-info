@@ -78,8 +78,13 @@ def render_info(info):
     table.add_column("Value")
 
     # Ocular Data
-    table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
-                  f'[i]{info["my_ocular"]["status"]} {data.ocular_circle(colour)}[/i]')
+    if info["my_ocular"]["status"]:
+        table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
+                      f'[i]{info["my_ocular"]["status"]} {data.ocular_circle(colour)}[/i]')
+    else:
+        table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
+                      f'[i]{info["my_ocular"]["status"]}')
+
 
     # ScratchDB Post Count and Forum Leaderboard
     table.add_row(f"[{colours['scratch_db']}]Forum Post Count[/{colours['scratch_db']}]",
