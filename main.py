@@ -31,7 +31,14 @@ def print_banner():
 
 
 def check_for_updates():
-    latest_version = float(get(config['update_url']).text)
+    latest_version = get(config['update_url'])
+    if latest_version.status_code == 404:
+        latest_version = get(config['legacy_update_url']).text
+    else:
+        latest_version = latest_version.json()['version']
+
+    latest_version = float(latest_version)
+
     if latest_version > config['version']:
         difference = latest_version - config['version']
         if difference < 0.1:
@@ -59,10 +66,10 @@ def validate_username(username):
     if status == "valid":
         return
     elif status == "deleted":
-        console.print(messages["deleted_user"])
+        console.print(messages["deleted_user"].format(username))
         quit()
     else:
-        console.print(messages["invalid_user"])
+        console.print(messages["invalid_user"].format(username))
         quit()
 
 
@@ -78,13 +85,13 @@ def render_info(info):
     table.add_column("Value")
 
     # Ocular Data
-    if info["my_ocular"]["status"]:
+    if info["my_ocular"]["status"] and colour:
         table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
                       f'[i]{info["my_ocular"]["status"]} {data.ocular_circle(colour)}[/i]')
     else:
+        input("EEE")
         table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
                       f'[i]{info["my_ocular"]["status"]}')
-
 
     # ScratchDB Post Count and Forum Leaderboard
     table.add_row(f"[{colours['scratch_db']}]Forum Post Count[/{colours['scratch_db']}]",
@@ -98,7 +105,8 @@ def render_info(info):
     table.add_row(f"[{c}]UserID[/{c}]", str(info["scratch"]["id"]))
     table.add_row(f"[{c}]ScratchTeam?[/{c}]",
                   str(info["scratch"]["scratchteam"]))
-    table.add_row(f"[{c}]Joined[/{c}]", info["scratch"]["history"]["joined"])
+    table.add_row(f"[{c}]Joined[/{c}]",
+                  data.format_time(info["scratch"]["history"]["joined"]))
     table.add_row(f"[{c}]About Me[/{c}]", info["scratch"]["profile"]["bio"])
     table.add_row(f"[{c}]What I'm Working on[/{c}]",
                   info["scratch"]["profile"]["status"])
