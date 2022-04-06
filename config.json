@@ -1,0 +1,18 @@
+{
+    "version": 1.8,
+    "colours": {
+        "ocular": "#0fbd8c",
+        "scratch_db": "#3279b7",
+        "scratch": "#f8aa38"
+    },
+    "messages": {
+        "0.1": "[cyan][*] An update is available. The latest version is {}![/cyan]",
+        "0.3": "[yellow][!] An update is available. The latest version is {}!![/yellow]",
+        "old": "[red][!!] An update is available. The latest version is {}!!![/red]",
+        "develop": "[yellow][*] You are currently on the development version of Scratch User Data, this is not a stable build. [/yellow]",
+        "deleted_user": "[red][!] The user [cyan]{}[/cyan][red] has been deleted.",
+        "invalid_user": "[red][!] The username [cyan]{}[/cyan][red] is invalid."
+    },
+    "update_url": "https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/config.json",
+    "legacy_update_url": "https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt"
+}

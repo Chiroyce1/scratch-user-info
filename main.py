@@ -1,115 +1,134 @@
-import sys
+import utils.data as data
+import json
 
-from colorama import Back, Fore, Style, init
+from sys import argv
+from sys import exit
+from requests import get
+from utils.info import get_info
+from rich.console import Console
+from rich.table import Table
 
-init()
+console = Console()
 
-VERSION = str('1.71')
+with open('config.json') as file:
+    config = json.load(file)
+    messages = config["messages"]
+    colours = config["colours"]
 
 
-def banner():
-    print(f"""{Fore.CYAN}
-   _____                _       _       _    _                 _____        _        
-  / ____|              | |     | |     | |  | |               |  __ \      | |       
- | (___   ___ _ __ __ _| |_ ___| |__   | |  | |___  ___ _ __  | |  | | __ _| |_ __ _ 
-  \___ \ / __| '__/ _` | __/ __| '_ \  | |  | / __|/ _ \ '__| | |  | |/ _` | __/ _` |
-  ____) | (__| | | (_| | || (__| | | | | |__| \__ \  __/ |    | |__| | (_| | || (_| |
- |_____/ \___|_|  \__,_|\__\___|_| |_|  \____/|___/\___|_|    |_____/ \__,_|\__\__,_|
-                                                                                                                                                               
-{Fore.GREEN}=========================================================
-{Fore.GREEN}[>] {Fore.CYAN} Version    : {Style.RESET_ALL}{VERSION}
-{Fore.GREEN}[>] {Fore.CYAN} Created by : {Style.RESET_ALL}Chiroyce
-{Fore.GREEN}=========================================================
+def quit():
+    console.print("[red]Quitting.[/red]")
+    exit()
+
+
+def print_banner():
+    console.print(f"""[blue][bold]
+===========================[bold]
+> Scratch User Data v{config['version']}
+[cyan]> Made by[/cyan] [blue]Chiroyce[/blue]
+===========================[/bold]
     """)
 
 
-banner()
+def check_for_updates():
+    latest_version = get(config['update_url'])
+    if latest_version.status_code == 404:
+        latest_version = get(config['legacy_update_url']).text
+    else:
+        latest_version = latest_version.json()['version']
 
-print(f"{Fore.CYAN}[+] Checking dependencie(s) . . .")
-try:
-    import requests
-except ModuleNotFoundError:
-    sys.exit(f"\n{Fore.RED}Requests module not found\n\nPlease install https://pypi.org/project/requests/ for this to work.\n")
-print(
-    f"{Fore.CYAN}[+] Dependencie(s) are up to date . . . {Fore.GREEN}requests>=2.27.1\n")
+    latest_version = float(latest_version)
 
-version = requests.get(
-    'https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt').text
+    if latest_version > config['version']:
+        difference = latest_version - config['version']
+        if difference < 0.1:
+            console.print(messages["0.1"].format(config['version']))
+        elif difference < 0.3:
+            console.print(messages["0.3"].format(config['version']))
+        else:
+            console.print(messages["old"].format(config['version']))
+    elif config['version'] > latest_version:
+        console.print(messages["develop"])
 
-if float(VERSION) < float(version):
-    print("Update available for Scratch User Data.\nYou can continue to use this version,\nbut updating is recommended.")
 
-if len(sys.argv) > 1:
-    username = sys.argv[1]
-    print(f"{Fore.CYAN}[+] Input taken from sys args: {Fore.GREEN}{username}")
-else:
-    username = input(f"\n{Fore.CYAN}Enter USERNAME\n>>> {Fore.GREEN}")
+def setup_username():
+    if len(argv) > 1:
+        console.print(f"[cyan][*] Username: [green]{argv[1]}")
+        return argv[1]
+    else:
+        console.print("[cyan]Enter username[/cyan]")
+        return input(">> ")
 
-print(f"\n{Fore.CYAN}[+] Validating username . . . (1/3)")
-response = requests.get(
-    f'https://api.scratch.mit.edu/users/{username}/projects').json()
-print(f"\n{Fore.CYAN}[+] Checking for valid shared projects . . (2/3)\n")
-try:
-    projectID = response[0]['id']
-    date = response[0]['history']['modified']
-    hasProjects = True
-except IndexError:
-    hasProjects = False
-    details = f"{Fore.GREEN}{username} {Fore.CYAN}has no shared projects. \n"
-except KeyError:
-    sys.exit(f"{Fore.RED}{username} is an invalid username.\n")
 
-if hasProjects:
-    response = requests.get(
-        f'https://projects.scratch.mit.edu/{projectID}/').json()
-    userAgent = response['meta']['agent']
-print("[+] Getting user data . . . (3/3)\n")
-try:
-    response = requests.get(
-        f'https://api.scratch.mit.edu/users/{username}/').json()
-    postData = requests.get(
-        f'https://scratchdb.lefty.one/v3/forum/user/info/{username}').json()
-    ocularData = requests.get(
-        f'https://my-ocular.jeffalo.net/api/user/{username}').json()
-except Exception as e:
-    print(f"{Fore.RED}Could not get some details due to an error...\n")
-print("===============================================\n")
-print(f"{Fore.CYAN}Username                 - {Fore.GREEN}{username}\n")
-print(f"{Fore.CYAN}User ID                  - {Fore.GREEN}{response['id']}\n")
-print(
-    f"{Fore.CYAN}Joined date              - {Fore.GREEN}{response['history']['joined']}\n")
-print(
-    f"{Fore.CYAN}Country                  - {Fore.GREEN}{response['profile']['country']}\n")
-print(
-    f"{Fore.CYAN}Scratch Team Member?     - {Fore.GREEN}{response['scratchteam']}\n")
-if hasProjects != True:
-    print(details)
-try:
-    print(
-        f"{Fore.CYAN}Total Forum Posts        - {Fore.GREEN}{postData['counts']['total']['count']}\n")
-except KeyError:
-    print(f"{Fore.CYAN}Total Forum posts   - {Fore.GREEN}0")
-try:
-    print(
-        f"{Fore.CYAN}Forum Leaderboard Rank   - {Fore.GREEN}{postData['counts']['total']['rank']}\n")
-except KeyError:
-    print(f"{Fore.CYAN}Forum Leaderboard Rank    - {Fore.GREEN}NA | {Fore.RED} User has no posts")
-if hasProjects != False:
-    print(f"{Fore.CYAN}User-Agent - \n{Fore.GREEN}{userAgent}\n")
-    print(f"{Fore.CYAN}User-Agent lastUpdate    - {Fore.GREEN}{date}\n")
-try:
-    print(
-        f"{Fore.CYAN}Ocular Status -            \n{Fore.GREEN}{ocularData['status']}\n")
-except KeyError:
-    print(f"{Fore.CYAN}Ocular Status -            \n{Fore.GREEN}NA | {Fore.RED}User has no Ocular Status\n")
-try:
-    print(
-        f"{Fore.CYAN}Ocular lastUpdate        -           {Fore.GREEN}{ocularData['meta']['updated']}\n")
-except KeyError:
-    print(f"{Fore.CYAN}Ocular lastUpdate -            \n{Fore.GREEN}NA | {Fore.RED}User has no Ocular Status\n")
-print(
-    f"{Fore.CYAN}About Me -            \n{Fore.GREEN}{response['profile']['bio']}\n")
-print(
-    f"{Fore.CYAN}What I'm working on - \n{Fore.GREEN}{response['profile']['status']}\n")
-print('\n')
-input(f"{Fore.CYAN}Press enter to exit\n")
+def validate_username(username):
+    console.print("[cyan]Validating username...")
+    status = data.validate_username(username)
+    if status == "valid":
+        return
+    elif status == "deleted":
+        console.print(messages["deleted_user"].format(username))
+        quit()
+    else:
+        console.print(messages["invalid_user"].format(username))
+        quit()
+
+
+def render_info(info):
+    username = info["scratch"]["username"]
+    colour = info["my_ocular"]["colour"]
+    if info["my_ocular"]["status"]:
+        table = Table(
+            title=f"[{colour}] {username}'s info [/{colour}]")
+    else:
+        table = Table(title=username)
+    table.add_column("Info")
+    table.add_column("Value")
+
+    # Ocular Data
+    if info["my_ocular"]["status"] and colour:
+        table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
+                      f'[i]{info["my_ocular"]["status"]} {data.ocular_circle(colour)}[/i]')
+    else:
+        input("EEE")
+        table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
+                      f'[i]{info["my_ocular"]["status"]}')
+
+    # ScratchDB Post Count and Forum Leaderboard
+    table.add_row(f"[{colours['scratch_db']}]Forum Post Count[/{colours['scratch_db']}]",
+                  f'{info["forum_info"]["count"]}')
+    table.add_row(f"[{colours['scratch_db']}]Forum Leaderboard Rank[/{colours['scratch_db']}]",
+                  f'#{info["forum_info"]["rank"]}')
+
+    # Scratch Info
+    c = colours["scratch"]
+    table.add_row(f"[{c}]Username[/{c}]", username)
+    table.add_row(f"[{c}]UserID[/{c}]", str(info["scratch"]["id"]))
+    table.add_row(f"[{c}]ScratchTeam?[/{c}]",
+                  str(info["scratch"]["scratchteam"]))
+    table.add_row(f"[{c}]Joined[/{c}]",
+                  data.format_time(info["scratch"]["history"]["joined"]))
+    table.add_row(f"[{c}]About Me[/{c}]", info["scratch"]["profile"]["bio"])
+    table.add_row(f"[{c}]What I'm Working on[/{c}]",
+                  info["scratch"]["profile"]["status"])
+    if info['user_agent']['has_projects']:
+        table.add_row(f"[{c}]User Agent[/{c}]",
+                      info['user_agent']['user_agent'])
+    else:
+        table.add_row(f"[{c}]User Agent[/{c}]",
+                      '[yellow]Unable to get UA, user has no shared projects[/yellow]')
+
+    console.print(table)
+
+
+def main():
+    print_banner()
+    check_for_updates()
+    username = setup_username()
+    validate_username(username)
+    console.print(
+        f"[cyan][*] Getting [/cyan][green]{username}[/green][cyan]'s info...\n[/cyan]")
+    render_info(get_info(username))
+
+
+if __name__ == '__main__':
+    main()
