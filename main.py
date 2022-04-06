@@ -3,6 +3,7 @@ import json
 
 from sys import argv
 from sys import exit
+from os import getcwd
 from requests import get
 from utils.info import get_info
 from rich.console import Console
@@ -10,7 +11,7 @@ from rich.table import Table
 
 console = Console()
 
-with open('config.json') as file:
+with open(f'{getcwd()}/config.json') as file:
     config = json.load(file)
     messages = config["messages"]
     colours = config["colours"]
