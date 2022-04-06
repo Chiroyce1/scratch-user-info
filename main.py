@@ -89,7 +89,6 @@ def render_info(info):
         table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
                       f'[i]{info["my_ocular"]["status"]} {data.ocular_circle(colour)}[/i]')
     else:
-        input("EEE")
         table.add_row(f"[{colours['ocular']}]Ocular Status[/{colours['ocular']}]",
                       f'[i]{info["my_ocular"]["status"]}')
 
