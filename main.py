@@ -7,10 +7,17 @@ from requests import get
 from utils.info import get_info
 from rich.console import Console
 from rich.table import Table
+from os.path import isfile
+
+from inspect import getsourcefile
+from os.path import abspath
+
+_config_path = abspath(getsourcefile(lambda:0).split("main.py")[0])
+if not isfile(_config_path):
+    _config_path = f'{__file__.split("main.py")[0]}config.json'
 
 console = Console()
-
-with open(f'{__file__.split("main.py")[0]}/config.json') as file:
+with open(_config_path) as file:
     config = json.load(file)
     messages = config["messages"]
     colours = config["colours"]

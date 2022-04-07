@@ -60,7 +60,11 @@ def user_agent(username):
 
 def forum_info(username):
     data = get(
-        f'https://scratchdb.lefty.one/v3/forum/user/info/{username}').json()
+        f'https://scratchdb.lefty.one/v3/forum/user/info/{username}')
+    if data.status_code != 200:
+        return {"count":"Unknown - ScratchDB error", "rank":"Unknown - ScratchDB error"}
+
+    data = data.json()
     info = {}
     if "error" not in data:
         info['count'] = data['counts']['total']['count']
