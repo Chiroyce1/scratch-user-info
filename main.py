@@ -42,20 +42,20 @@ def check_for_updates():
     if latest_version.status_code == 404:
         latest_version = get(config['legacy_update_url']).text
     else:
-        latest_version = latest_version.json()['version']
+        latest_version = str(latest_version.json()['version'])
 
-    latest_version = float(latest_version)
+    current_version = config['version']
 
-    if latest_version > config['version']:
-        difference = latest_version - config['version']
-        if difference < 0.1:
-            console.print(messages["0.1"].format(config['version']))
-        elif difference < 0.3:
-            console.print(messages["0.3"].format(config['version']))
-        else:
-            console.print(messages["old"].format(config['version']))
-    elif config['version'] > latest_version:
+    if current_version == latest_version:
+        return
+
+    if current_version > latest_version:
         console.print(messages["develop"])
+        return
+
+    if latest_version > current_version:
+        console.print(messages["update_available"].format(latest_version))
+        return
 
 
 def setup_username():
