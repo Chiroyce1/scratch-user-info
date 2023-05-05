@@ -43,21 +43,6 @@ def validate_username(username):
         return "invalid"
 
 
-def user_agent(username):
-    response = get(
-        f'https://api.scratch.mit.edu/users/{username}/projects', headers=_headers).json()
-    if len(response) == 0:
-        return {'has_projects': False}
-    else:
-        id = response[0]['id']
-        response = get(
-            f"https://projects.scratch.mit.edu/{id}/", headers=_headers).json()
-        return {
-            'has_projects': True,
-            'user_agent': response['meta']['agent']
-        }
-
-
 def forum_info(username):
     data = get(
         f'https://scratchdb.lefty.one/v3/forum/user/info/{username}')

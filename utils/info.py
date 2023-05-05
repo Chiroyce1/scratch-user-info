@@ -6,6 +6,5 @@ def get_info(username):
         "my_ocular": data.my_ocular(username),
         "forum_info": data.forum_info(username),
         "scratch": data.api(username),
-        "user_agent": data.user_agent(username)
     }
     return info

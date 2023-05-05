@@ -1,5 +1,5 @@
 {
-    "version": 1.84,
+    "version": 1.85,
     "colours": {
         "ocular": "#0fbd8c",
         "scratch_db": "#3279b7",
@@ -11,6 +11,6 @@
         "deleted_user": "[red][!] The user [cyan]{}[/cyan][red] has been deleted.",
         "invalid_user": "[red][!] The username [cyan]{}[/cyan][red] is invalid."
     },
-    "update_url": "https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/config.json",
+    "update_url": "https://raw.githubusercontent.com/Chiroyce1/scratch-user-info/main/config.json",
     "legacy_update_url": "https://raw.githubusercontent.com/Chiroyce1/scratch-user-data/main/version.txt"
 }

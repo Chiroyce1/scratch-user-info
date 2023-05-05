@@ -42,7 +42,7 @@ def check_for_updates():
     if latest_version.status_code == 404:
         latest_version = get(config['legacy_update_url']).text
     else:
-        latest_version = str(latest_version.json()['version'])
+        latest_version = latest_version.json()['version']
 
     current_version = config['version']
 
@@ -116,12 +116,6 @@ def render_info(info):
     table.add_row(f"[{c}]About Me[/{c}]", info["scratch"]["profile"]["bio"])
     table.add_row(f"[{c}]What I'm Working on[/{c}]",
                   info["scratch"]["profile"]["status"])
-    if info['user_agent']['has_projects']:
-        table.add_row(f"[{c}]User Agent[/{c}]",
-                      info['user_agent']['user_agent'])
-    else:
-        table.add_row(f"[{c}]User Agent[/{c}]",
-                      '[yellow]Unable to get UA, user has no shared projects[/yellow]')
 
     console.print(table)
 
